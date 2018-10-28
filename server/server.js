@@ -2,6 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
+const _ = require('lodash');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -16,6 +17,13 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('Lost connection to client');
+  });
+
+  socket.on('createMessage', (message) => {
+    console.log('createMessage', message);
+    var outgoingMessage = _.pick(message, ['text', 'from'])
+    outgoingMessage.createdAt = new Date().getTime();
+    socket.emit('newMessage', outgoingMessage);
   });
 });
 
