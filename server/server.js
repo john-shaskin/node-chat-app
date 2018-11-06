@@ -19,11 +19,24 @@ io.on('connection', (socket) => {
     console.log('Lost connection to client');
   });
 
+  var joinedTime = new Date().getTime()
+  socket.emit('newMessage', {
+    from: 'Moonman',
+    text: 'Welcome to the party',
+    createdAt: joinedTime
+  });
+  socket.broadcast.emit('newMessage', {
+    from: 'Moonman',
+    text: 'New victim joined',
+    createdAt: joinedTime
+  });
+
   socket.on('createMessage', (message) => {
     console.log('createMessage', message);
     var outgoingMessage = _.pick(message, ['text', 'from'])
     outgoingMessage.createdAt = new Date().getTime();
     io.emit('newMessage', outgoingMessage);
+    // socket.broadcast.emit('newMessage', outgoingMessage)
   });
 });
 
