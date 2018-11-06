@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
     console.log('createMessage', message);
     var outgoingMessage = _.pick(message, ['text', 'from'])
     outgoingMessage.createdAt = new Date().getTime();
-    socket.emit('newMessage', outgoingMessage);
+    io.emit('newMessage', outgoingMessage);
   });
 });
 
