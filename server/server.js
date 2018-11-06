@@ -4,6 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 const _ = require('lodash');
 
+const {generateMessage} = require('./utils/message');
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
 var app = express();
@@ -19,22 +20,12 @@ io.on('connection', (socket) => {
     console.log('Lost connection to client');
   });
 
-  var joinedTime = new Date().getTime()
-  socket.emit('newMessage', {
-    from: 'Moonman',
-    text: 'Welcome to the party',
-    createdAt: joinedTime
-  });
-  socket.broadcast.emit('newMessage', {
-    from: 'Moonman',
-    text: 'New victim joined',
-    createdAt: joinedTime
-  });
+  socket.emit('newMessage', generateMessage('Moonman', 'Welcome to the party'));
+  socket.broadcast.emit('newMessage', generateMessage('Moonman', 'New victim joined'));
 
   socket.on('createMessage', (message) => {
     console.log('createMessage', message);
-    var outgoingMessage = _.pick(message, ['text', 'from'])
-    outgoingMessage.createdAt = new Date().getTime();
+    var outgoingMessage = generateMessage(message.from, message.text);
     io.emit('newMessage', outgoingMessage);
     // socket.broadcast.emit('newMessage', outgoingMessage)
   });
