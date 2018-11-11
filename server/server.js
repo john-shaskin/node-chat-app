@@ -23,10 +23,11 @@ io.on('connection', (socket) => {
   socket.emit('newMessage', generateMessage('Moonman', 'Welcome to the party'));
   socket.broadcast.emit('newMessage', generateMessage('Moonman', 'New victim joined'));
 
-  socket.on('createMessage', (message) => {
+  socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
     var outgoingMessage = generateMessage(message.from, message.text);
     io.emit('newMessage', outgoingMessage);
+    callback('Got your message -Love, the server');
     // socket.broadcast.emit('newMessage', outgoingMessage)
   });
 });
