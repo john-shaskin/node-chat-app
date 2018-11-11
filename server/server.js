@@ -20,8 +20,8 @@ io.on('connection', (socket) => {
     console.log('Lost connection to client');
   });
 
-  socket.emit('newMessage', generateMessage('Moonman', 'Welcome to the party'));
-  socket.broadcast.emit('newMessage', generateMessage('Moonman', 'New victim joined'));
+  socket.emit('newMessage', generateMessage('Admin', 'Welcome to the party'));
+  socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
   socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
