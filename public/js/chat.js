@@ -1,5 +1,8 @@
 var socket = io();
 
+/**
+ * Util functions
+ */
 function scrollToBottom () {
   // Selectors
   var messages = jQuery('#messages');
@@ -17,6 +20,10 @@ function scrollToBottom () {
   }
 }
 
+
+/**
+ * Socket event handlers
+ */
 socket.on('connect', function () {
   var params = jQuery.deparam(window.location.search);
 
@@ -70,7 +77,9 @@ socket.on('newLocationMessage', function (message) {
   scrollToBottom();
 });
 
-// Button registration
+/**
+ * Control bindings
+ */
 jQuery('#message-form').on('submit', function (e) {
   e.preventDefault();
 

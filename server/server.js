@@ -2,13 +2,16 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const _ = require('lodash');
 
 const {generateMessage,generateLocationMessage} = require('./utils/message');
 const {isRealString} = require('./utils/validation.js');
 const {Users} = require('./utils/users');
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
+
+/**
+ * Basic express setup
+ */
 var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
@@ -16,6 +19,9 @@ var users = new Users();
 
 app.use(express.static(publicPath));
 
+/**
+ * Set up socket event handlers
+ */
 io.on('connection', (socket) => {
   console.log('New user connected');
 
@@ -32,10 +38,6 @@ io.on('connection', (socket) => {
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback('Name and room name are required');
     }
-
-    // io.emit -> io.to('room name');
-    // socket.broadcast.emit => socket.broadcast.to('room name');
-    // socket.emit -> socket.emit();
 
     socket.join(params.room);
     users.removeUser(socket.id);
@@ -68,6 +70,9 @@ io.on('connection', (socket) => {
   });
 });
 
+/**
+ * Start the server
+ */
 server.listen(port, () => {
   console.log(`Chatt server listening on port ${port}`);
 });
